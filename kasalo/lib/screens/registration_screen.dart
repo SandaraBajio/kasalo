@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:geolocator/geolocator.dart'; // For GPS
+import 'package:geocoding/geocoding.dart';   // For Address Text
 import '../services/auth_service.dart';
 import '../services/database_service.dart';
 
@@ -12,127 +14,238 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
 
+  // Text Controllers (Needed to update text automatically)
+  final TextEditingController _addressController = TextEditingController();
+
   // State variables
   String fullName = '';
-  String contactNumber = ''; // Separate variable
-  String age = '';           // Separate variable
+  String contactNumber = '';
+  String age = '';
   String email = '';
   String password = '';
   String error = '';
   bool loading = false;
+  bool gettingLocation = false; // To show loading spinner on icon
+
+  @override
+  void dispose() {
+    _addressController.dispose();
+    super.dispose();
+  }
+
+  // --- FUNCTION: Get Current Location ---
+  Future<void> _getCurrentLocation() async {
+    setState(() => gettingLocation = true);
+    try {
+      // 1. Check permissions
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          setState(() => gettingLocation = false);
+          return; // Permission denied
+        }
+      }
+
+      // 2. Get GPS Position
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high
+      );
+
+      // 3. Convert GPS to Address (Geocoding)
+      List<Placemark> placemarks = await placemarkFromCoordinates(
+        position.latitude, 
+        position.longitude
+      );
+
+      // 4. Format the address
+      if (placemarks.isNotEmpty) {
+        Placemark place = placemarks[0];
+        // Example: "Batangas City, Calabarzon"
+        String address = "${place.locality}, ${place.administrativeArea}"; 
+        
+        setState(() {
+          _addressController.text = address; // Update the text field
+        });
+      }
+    } catch (e) {
+      print(e); // Handle errors
+    } finally {
+      setState(() => gettingLocation = false);
+    }
+  }
+
+  // Helper for Input Style
+  InputDecoration customInputDecoration(String label, {Widget? suffixIcon}) {
+    // Colors from your design
+    final Color borderColor = Color(0xFF8D6E63);
+    final Color textColor = Color(0xFF5D4037);
+    
+    return InputDecoration(
+      labelText: label,
+      labelStyle: TextStyle(color: textColor),
+      contentPadding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+      suffixIcon: suffixIcon, // Add icon support
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(30),
+        borderSide: BorderSide(color: borderColor, width: 1.5),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(30),
+        borderSide: BorderSide(color: borderColor, width: 2.0),
+      ),
+      filled: true,
+      fillColor: Colors.white,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
+    final Color backgroundColor = Color(0xFFFFFDE7);
+    final Color buttonColor = Color(0xFFF9E27F);
+    final Color textColor = Color(0xFF5D4037);
+
     return Scaffold(
-      appBar: AppBar(title: Text("Register")),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 50),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              SizedBox(height: 20),
-              
-              // 1. Full Name
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: 'Full Name',
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.person),
-                ),
-                validator: (val) => val!.isEmpty ? 'Enter your name' : null,
-                onChanged: (val) => setState(() => fullName = val),
+      backgroundColor: backgroundColor,
+      body: SafeArea(
+        child: Column(
+          children: [
+            // Header
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+              child: Row(
+                children: [
+                  TextButton.icon(
+                    onPressed: () => Navigator.pop(context),
+                    icon: Icon(Icons.arrow_back_ios, size: 18, color: textColor),
+                    label: Text("Back", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: textColor)),
+                  ),
+                ],
               ),
-              SizedBox(height: 20),
+            ),
 
-              // 2. NEW: Contact Number (Split)
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: 'Contact Number',
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.phone),
+            // Form Container
+            Expanded(
+              child: Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(topLeft: Radius.circular(40), topRight: Radius.circular(40)),
+                  boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 10, spreadRadius: 2)],
                 ),
-                keyboardType: TextInputType.phone, // Numerical keyboard
-                validator: (val) => val!.isEmpty ? 'Enter contact number' : null,
-                onChanged: (val) => setState(() => contactNumber = val),
-              ),
-              SizedBox(height: 20),
+                margin: EdgeInsets.fromLTRB(20, 0, 20, 20),
+                child: SingleChildScrollView(
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        Text("SIGN UP", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xFFA1887F))),
+                        SizedBox(height: 30),
 
-              // 3. NEW: Age (Split)
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: 'Age',
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.cake),
-                ),
-                keyboardType: TextInputType.number, // Numerical keyboard
-                validator: (val) => val!.isEmpty ? 'Enter your age' : null,
-                onChanged: (val) => setState(() => age = val),
-              ),
-              SizedBox(height: 20),
+                        // Full Name
+                        TextFormField(
+                          decoration: customInputDecoration('Full name'),
+                          validator: (val) => val!.isEmpty ? 'Enter name' : null,
+                          onChanged: (val) => setState(() => fullName = val),
+                        ),
+                        SizedBox(height: 15),
 
-              // 4. Email
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: 'Email',
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.email),
-                ),
-                validator: (val) => val!.isEmpty ? 'Enter an email' : null,
-                onChanged: (val) => setState(() => email = val),
-              ),
-              SizedBox(height: 20),
+                        // Email
+                        TextFormField(
+                          decoration: customInputDecoration('Email'),
+                          validator: (val) => val!.isEmpty ? 'Enter email' : null,
+                          onChanged: (val) => setState(() => email = val),
+                        ),
+                        SizedBox(height: 15),
 
-              // 5. Password
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: 'Password',
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.lock),
-                ),
-                obscureText: true,
-                validator: (val) => val!.length < 6 ? 'Password must be 6+ chars' : null,
-                onChanged: (val) => setState(() => password = val),
-              ),
-              SizedBox(height: 20),
+                        // Contact Number
+                        TextFormField(
+                          decoration: customInputDecoration('Contact Number'),
+                          keyboardType: TextInputType.phone,
+                          validator: (val) => val!.isEmpty ? 'Enter contact' : null,
+                          onChanged: (val) => setState(() => contactNumber = val),
+                        ),
+                        SizedBox(height: 15),
+                        
+                        // Age
+                        TextFormField(
+                          decoration: customInputDecoration('Age'),
+                          keyboardType: TextInputType.number,
+                          validator: (val) => val!.isEmpty ? 'Enter age' : null,
+                          onChanged: (val) => setState(() => age = val),
+                        ),
+                        SizedBox(height: 15),
 
-              // Submit Button
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
-                  minimumSize: Size(double.infinity, 50), // Make button wide
+                        // --- NEW ADDRESS FIELD WITH AUTO-DETECT ---
+                        TextFormField(
+                          controller: _addressController, // Use controller to update text
+                          decoration: customInputDecoration(
+                            'Address',
+                            suffixIcon: IconButton(
+                              icon: gettingLocation 
+                                ? SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2)) 
+                                : Icon(Icons.my_location, color: Colors.green),
+                              onPressed: _getCurrentLocation, // Trigger detection
+                            ),
+                          ),
+                          readOnly: false, // User can still type if they want
+                          validator: (val) => val!.isEmpty ? 'Enter or detect address' : null,
+                        ),
+                        SizedBox(height: 15),
+
+                        // Password
+                        TextFormField(
+                          decoration: customInputDecoration('Password'),
+                          obscureText: true,
+                          validator: (val) => val!.length < 6 ? 'Min 6 chars' : null,
+                          onChanged: (val) => setState(() => password = val),
+                        ),
+                        SizedBox(height: 30),
+
+                        // Register Button
+                        SizedBox(
+                          width: double.infinity,
+                          height: 50,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: buttonColor,
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                            ),
+                            child: Text(
+                              loading ? "Creating..." : "Register",
+                              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: textColor),
+                            ),
+                            onPressed: () async {
+                              if (_formKey.currentState!.validate()) {
+                                setState(() => loading = true);
+                                dynamic result = await _auth.registerWithEmailAndPassword(email, password);
+                                if (result == null) {
+                                  setState(() { error = 'Invalid email'; loading = false; });
+                                } else {
+                                  // SAVE ALL DATA TO FIRESTORE
+                                  User? user = result;
+                                  await DatabaseService(uid: user!.uid).updateUserData(
+                                    fullName: fullName,
+                                    contactNumber: contactNumber,
+                                    age: age,
+                                    address: _addressController.text, // Pass the detected address
+                                  );
+                                  Navigator.pushReplacementNamed(context, '/home');
+                                }
+                              }
+                            },
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        Text(error, style: TextStyle(color: Colors.red)),
+                      ],
+                    ),
+                  ),
                 ),
-                child: Text(
-                  loading ? 'Registering...' : 'Sign Up',
-                  style: TextStyle(color: Colors.white, fontSize: 16),
-                ),
-                onPressed: () async {
-                  if (_formKey.currentState!.validate()) {
-                    setState(() => loading = true);
-                    
-                    // Create User in Auth
-                    dynamic result = await _auth.registerWithEmailAndPassword(email, password);
-                    
-                    if (result == null) {
-                      setState(() {
-                        error = 'Please supply a valid email';
-                        loading = false;
-                      });
-                    } else {
-                      // UPDATED: Pass all 3 separate fields to the database
-                      User? user = result;
-                      await DatabaseService(uid: user!.uid).updateUserData(fullName, contactNumber, age);
-                      
-                      Navigator.pushReplacementNamed(context, '/home');
-                    }
-                  }
-                },
               ),
-              SizedBox(height: 12),
-              
-              Text(error, style: TextStyle(color: Colors.red, fontSize: 14)),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
