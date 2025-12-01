@@ -4,8 +4,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:intl/intl.dart'; // Add this to pubspec.yaml if needed for formatting, or use basic string
+import 'package:intl/intl.dart'; 
 import '../services/database_service.dart';
+import 'package:google_fonts/google_fonts.dart'; 
 
 class AddDonationScreen extends StatefulWidget {
   @override
@@ -20,13 +21,13 @@ class _AddDonationScreenState extends State<AddDonationScreen> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _locationController = TextEditingController();
   final TextEditingController _quantityController = TextEditingController();
-  final TextEditingController _expiryController = TextEditingController(); // New Controller for Date
+  final TextEditingController _expiryController = TextEditingController(); 
   
   // State Variables
   String selectedUnit = 'pcs';
   String? selectedCategory;
   String? selectedCondition;
-  DateTime? _selectedExpiryDate; // Store the actual date object
+  DateTime? _selectedExpiryDate; 
   
   List<File> _selectedImages = [];
   final int maxImages = 5; 
@@ -63,16 +64,18 @@ class _AddDonationScreenState extends State<AddDonationScreen> {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
-      firstDate: DateTime.now(), // Can't be in the past
+      firstDate: DateTime.now(), 
       lastDate: DateTime(2101),
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: ColorScheme.light(
-              primary: Color(0xFFA1770E), // Gold Header
+              primary: Color(0xFFB78A00), // Gold Header
               onPrimary: Colors.white,
-              onSurface: Colors.brown,
+              onSurface: Color(0xFF7D5E00),
             ),
+            // Apply font to Date Picker text
+            textTheme: GoogleFonts.poppinsTextTheme(), 
           ),
           child: child!,
         );
@@ -81,7 +84,6 @@ class _AddDonationScreenState extends State<AddDonationScreen> {
     if (picked != null) {
       setState(() {
         _selectedExpiryDate = picked;
-        // Format: MM/DD/YYYY
         _expiryController.text = "${picked.month}/${picked.day}/${picked.year}";
       });
     }
@@ -101,7 +103,7 @@ class _AddDonationScreenState extends State<AddDonationScreen> {
               _selectedImages.add(File(pickedFiles[i].path));
             }
           } else {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Max $maxImages images allowed")));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Max $maxImages images allowed", style: GoogleFonts.poppins())));
           }
         });
       }
@@ -137,7 +139,7 @@ class _AddDonationScreenState extends State<AddDonationScreen> {
   void _submitDonation() async {
     if (_formKey.currentState!.validate()) {
       if (_selectedImages.isEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Please upload at least one image")));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Please upload at least one image", style: GoogleFonts.poppins())));
         return;
       }
       
@@ -159,14 +161,14 @@ class _AddDonationScreenState extends State<AddDonationScreen> {
           condition: selectedCondition!,
           location: _locationController.text,
           imageUrls: imageUrls,
-          expiryDate: _selectedExpiryDate, // Pass the date (can be null)
+          expiryDate: _selectedExpiryDate, 
         );
         
         Navigator.pop(context);
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Donation Posted!")));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Donation Posted!", style: GoogleFonts.poppins())));
       } catch (e) {
         print(e);
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error posting donation")));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error posting donation", style: GoogleFonts.poppins())));
       } finally {
         setState(() => loading = false);
       }
@@ -176,17 +178,40 @@ class _AddDonationScreenState extends State<AddDonationScreen> {
   InputDecoration _inputDeco(String label) {
     return InputDecoration(
       labelText: label,
-      labelStyle: TextStyle(color: Color(0xFFA1770E), fontWeight: FontWeight.bold),
-      enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(15), borderSide: BorderSide(color: Color(0xFFF9E27F), width: 1.5)),
-      focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(15), borderSide: BorderSide(color: Color(0xFFA1770E), width: 2.0)),
-      filled: true, fillColor: Colors.white, contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+      labelStyle: GoogleFonts.poppins(color: Color(0xFFB78A00), fontWeight: FontWeight.bold),
+      
+      // Standard Border (Gold)
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(15), 
+        borderSide: BorderSide(color: Color(0xFFF7E28C), width: 1.5)
+      ),
+      
+      // Focused Border (Darker Gold)
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(15), 
+        borderSide: BorderSide(color: Color(0xFFB78A00), width: 2.0)
+      ),
+      
+      // Error Border
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(15), 
+        borderSide: BorderSide(color: Color(0xFFF7E28C), width: 1.5) 
+      ),
+      focusedErrorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(15), 
+        borderSide: BorderSide(color: Color(0xFFB78A00), width: 2.0) 
+      ),
+      
+      errorStyle: GoogleFonts.poppins(color: Colors.red, fontSize: 12),
+      filled: true, 
+      fillColor: Colors.white, 
+      contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     // Get the conditions for the currently selected category
-    // If none selected, list is empty
     List<String> currentConditions = selectedCategory != null 
         ? categoryConditions[selectedCategory]! 
         : [];
@@ -199,26 +224,77 @@ class _AddDonationScreenState extends State<AddDonationScreen> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        leading: IconButton(icon: Icon(Icons.arrow_back_ios, color: Colors.brown), onPressed: () => Navigator.pop(context)),
+        leading: IconButton(icon: Icon(Icons.arrow_back_ios, color: Color(0xFF7D5E00)), onPressed: () => Navigator.pop(context)),
+        title: Text(
+          "Donation Form", 
+          style: GoogleFonts.poppins(fontSize: 24, fontWeight: FontWeight.bold, color: Color(0xFFB78A00))
+        ),
+        centerTitle: true,
+      ),
+      // --- BOTTOM NAVIGATION BAR FOR THE BUTTON ---
+      bottomNavigationBar: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: SizedBox(
+            width: double.infinity,
+            height: 55, // Slightly taller for better touch target
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xFFB78A00), 
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                elevation: 5,
+              ),
+              child: loading 
+                ? CircularProgressIndicator(color: Colors.white) 
+                : Text("Upload Donation", style: GoogleFonts.poppins(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18)),
+              onPressed: loading ? null : _submitDonation,
+            ),
+          ),
+        ),
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(25),
         child: Form(
           key: _formKey,
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text("Donation Form", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Color(0xFFA1770E))),
-              SizedBox(height: 20),
 
-              TextFormField(controller: _nameController, decoration: _inputDeco("Name of Item"), validator: (val) => val!.isEmpty ? "Required" : null),
+              TextFormField(
+                controller: _nameController, 
+                decoration: _inputDeco("Name of Item"), 
+                style: GoogleFonts.poppins(color: Color(0xFF7D5E00)), 
+                validator: (val) => val!.isEmpty ? "Required" : null
+              ),
               SizedBox(height: 15),
 
               Row(
+                crossAxisAlignment: CrossAxisAlignment.start, 
                 children: [
-                  Expanded(flex: 2, child: TextFormField(controller: _quantityController, keyboardType: TextInputType.number, decoration: _inputDeco("Quantity"), validator: (val) => val!.isEmpty ? "Required" : null)),
+                  Expanded(
+                    flex: 2, 
+                    child: TextFormField(
+                      controller: _quantityController, 
+                      keyboardType: TextInputType.number, 
+                      decoration: _inputDeco("Quantity"), 
+                      style: GoogleFonts.poppins(color: Color(0xFF7D5E00)), 
+                      validator: (val) => val!.isEmpty ? "Required" : null
+                    )
+                  ),
                   SizedBox(width: 10),
-                  Expanded(flex: 1, child: DropdownButtonFormField<String>(value: selectedUnit, decoration: _inputDeco("Unit"), items: units.map((u) => DropdownMenuItem(value: u, child: Text(u))).toList(), onChanged: (val) => setState(() => selectedUnit = val!))),
+                  Expanded(
+                    flex: 1, 
+                    child: DropdownButtonFormField<String>(
+                      value: selectedUnit, 
+                      decoration: _inputDeco("Unit"), 
+                      style: GoogleFonts.poppins(color: Color(0xFF7D5E00)), 
+                      items: units.map((u) => DropdownMenuItem(
+                        value: u, 
+                        child: Text(u, style: GoogleFonts.poppins()) 
+                      )).toList(), 
+                      onChanged: (val) => setState(() => selectedUnit = val!)
+                    )
+                  ),
                 ],
               ),
               SizedBox(height: 15),
@@ -227,13 +303,16 @@ class _AddDonationScreenState extends State<AddDonationScreen> {
               DropdownButtonFormField<String>(
                 value: selectedCategory,
                 decoration: _inputDeco("Item Category"),
-                // Use the keys from our Map
-                items: categoryConditions.keys.map((c) => DropdownMenuItem(value: c, child: Text(c))).toList(),
+                style: GoogleFonts.poppins(color: Color(0xFF7D5E00)),
+                items: categoryConditions.keys.map((c) => DropdownMenuItem(
+                  value: c, 
+                  child: Text(c, style: GoogleFonts.poppins())
+                )).toList(),
                 onChanged: (val) {
                   setState(() {
                     selectedCategory = val;
-                    selectedCondition = null; // RESET condition when category changes
-                    _selectedExpiryDate = null; // Reset date
+                    selectedCondition = null; 
+                    _selectedExpiryDate = null; 
                     _expiryController.clear();
                   });
                 },
@@ -245,11 +324,17 @@ class _AddDonationScreenState extends State<AddDonationScreen> {
               DropdownButtonFormField<String>(
                 value: selectedCondition,
                 decoration: _inputDeco("Condition"),
-                // If no category selected, disable this (null items) or show empty list
-                items: currentConditions.map((c) => DropdownMenuItem(value: c, child: Text(c))).toList(),
+                style: GoogleFonts.poppins(color: Color(0xFF7D5E00)),
+                items: currentConditions.map((c) => DropdownMenuItem(
+                  value: c, 
+                  child: Text(c, style: GoogleFonts.poppins())
+                )).toList(),
                 onChanged: (val) => setState(() => selectedCondition = val),
                 validator: (val) => val == null ? "Required" : null,
-                hint: Text(selectedCategory == null ? "Select Category First" : "Select Condition"),
+                hint: Text(
+                  selectedCategory == null ? "Select Category First" : "Select Condition",
+                  style: GoogleFonts.poppins()
+                ),
               ),
               SizedBox(height: 15),
 
@@ -257,60 +342,104 @@ class _AddDonationScreenState extends State<AddDonationScreen> {
               if (showExpiry) ...[
                 TextFormField(
                   controller: _expiryController,
-                  readOnly: true, // Prevent manual typing
-                  onTap: _pickExpiryDate, // Open Date Picker
+                  readOnly: true, 
+                  onTap: _pickExpiryDate, 
+                  style: GoogleFonts.poppins(color: Color(0xFF7D5E00)),
                   decoration: _inputDeco("Expiry Date (MM/DD/YYYY)").copyWith(
-                    suffixIcon: Icon(Icons.calendar_today, color: Colors.brown)
+                    suffixIcon: Icon(Icons.calendar_today, color: Color(0xFFB78A00))
                   ),
                   validator: (val) => val!.isEmpty ? "Required for this category" : null,
                 ),
                 SizedBox(height: 15),
               ],
 
-              TextFormField(controller: _locationController, decoration: _inputDeco("Location").copyWith(suffixIcon: IconButton(icon: gettingLocation ? SizedBox(width: 20, height: 20, child: CircularProgressIndicator()) : Icon(Icons.my_location, color: Colors.brown), onPressed: _getCurrentLocation)), validator: (val) => val!.isEmpty ? "Required" : null),
+              TextFormField(
+                controller: _locationController, 
+                style: GoogleFonts.poppins(color: Color(0xFF7D5E00)),
+                decoration: _inputDeco("Location").copyWith(
+                  suffixIcon: IconButton(
+                    icon: gettingLocation 
+                      ? SizedBox(width: 20, height: 20, child: CircularProgressIndicator()) 
+                      : Icon(Icons.my_location, color: Color(0xFFB78A00)), 
+                    onPressed: _getCurrentLocation
+                  )
+                ), 
+                validator: (val) => val!.isEmpty ? "Required" : null
+              ),
               SizedBox(height: 25),
 
-              Text("Images (${_selectedImages.length}/$maxImages)", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.brown)),
+              // --- BIGGER & CENTERED IMAGES SECTION ---
+              Center(
+                child: Text(
+                  "Images (${_selectedImages.length}/$maxImages)", 
+                  style: GoogleFonts.poppins(fontWeight: FontWeight.bold, color: Color(0xFFB78A00), fontSize: 16)
+                ),
+              ),
               SizedBox(height: 10),
               
               Container(
-                height: 120,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: _selectedImages.length + 1,
-                  itemBuilder: (context, index) {
-                    if (index == _selectedImages.length) {
-                      if (_selectedImages.length >= maxImages) return SizedBox();
-                      return GestureDetector(
-                        onTap: _pickImages,
-                        child: Container(
-                          width: 100, margin: EdgeInsets.only(right: 10),
-                          decoration: BoxDecoration(color: Colors.grey[100], borderRadius: BorderRadius.circular(15), border: Border.all(color: Color(0xFFF9E27F), width: 2)),
-                          child: Icon(Icons.add_a_photo, color: Color(0xFFA1770E), size: 30),
-                        ),
+                height: 200, // Increased height (was 120)
+                child: Center(
+                  child: ListView.builder(
+                    shrinkWrap: true, // Helps center content if few items
+                    scrollDirection: Axis.horizontal,
+                    itemCount: _selectedImages.length + 1,
+                    itemBuilder: (context, index) {
+                      // The "Add Image" Button
+                      if (index == _selectedImages.length) {
+                        if (_selectedImages.length >= maxImages) return SizedBox();
+                        return GestureDetector(
+                          onTap: _pickImages,
+                          child: Container(
+                            width: 350, // Increased width (was 100)
+                            margin: EdgeInsets.symmetric(horizontal: 5), // Spacing
+                            decoration: BoxDecoration(
+                              color: Colors.grey[100], 
+                              borderRadius: BorderRadius.circular(20), 
+                              border: Border.all(color: Color(0xFFF7E28C), width: 3)
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.add_a_photo, color: Color(0xFFB78A00), size: 40),
+                                SizedBox(height: 5),
+                                Text("Add Photo", style: GoogleFonts.poppins(color: Color(0xFFB78A00), fontSize: 12))
+                              ],
+                            ),
+                          ),
+                        );
+                      }
+                      // The Image Previews
+                      return Stack(
+                        children: [
+                          Container(
+                            width: 160, // Increased width (was 100)
+                            margin: EdgeInsets.symmetric(horizontal: 10), 
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20), 
+                              image: DecorationImage(image: FileImage(_selectedImages[index]), fit: BoxFit.cover),
+                              border: Border.all(color: Colors.grey.withOpacity(0.3))
+                            )
+                          ),
+                          Positioned(
+                            top: 5, right: 15, 
+                            child: GestureDetector(
+                              onTap: () => _removeImage(index), 
+                              child: CircleAvatar(
+                                radius: 14, 
+                                backgroundColor: Colors.white, 
+                                child: Icon(Icons.close, size: 18, color: Colors.red)
+                              )
+                            )
+                          )
+                        ],
                       );
-                    }
-                    return Stack(
-                      children: [
-                        Container(width: 100, margin: EdgeInsets.only(right: 10), decoration: BoxDecoration(borderRadius: BorderRadius.circular(15), image: DecorationImage(image: FileImage(_selectedImages[index]), fit: BoxFit.cover))),
-                        Positioned(top: 5, right: 15, child: GestureDetector(onTap: () => _removeImage(index), child: CircleAvatar(radius: 12, backgroundColor: Colors.white, child: Icon(Icons.close, size: 16, color: Colors.red))))
-                      ],
-                    );
-                  },
+                    },
+                  ),
                 ),
               ),
-              
-              SizedBox(height: 30),
-
-              SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: Color(0xFFA1770E), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
-                  child: loading ? CircularProgressIndicator(color: Colors.white) : Text("Upload Donation", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
-                  onPressed: loading ? null : _submitDonation,
-                ),
-              ),
+              // Spacing at the bottom so content isn't hidden by the floating button
+              SizedBox(height: 20),
             ],
           ),
         ),

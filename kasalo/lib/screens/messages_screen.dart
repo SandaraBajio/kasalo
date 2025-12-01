@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../services/database_service.dart';
 import 'chat_screen.dart';
+import 'package:google_fonts/google_fonts.dart'; 
+
 
 class MessagesScreen extends StatefulWidget {
   @override
@@ -35,9 +37,9 @@ class _MessagesScreenState extends State<MessagesScreen> {
                 decoration: InputDecoration(
                   hintText: "Search messages...",
                   border: InputBorder.none,
-                  hintStyle: TextStyle(color: Colors.grey),
+                  hintStyle: TextStyle(color: Color(0xFF7D5E00)),
                 ),
-                style: TextStyle(color: Colors.black, fontSize: 18),
+                style: GoogleFonts.poppins(color: Color(0xFF7D5E00), fontSize: 18),
                 onChanged: (val) {
                   setState(() {
                     _searchQuery = val.toLowerCase();
@@ -48,12 +50,12 @@ class _MessagesScreenState extends State<MessagesScreen> {
                 padding: const EdgeInsets.only(left: 10, top: 10),
                 child: Text(
                   "Messages", 
-                  style: TextStyle(color: Color(0xFFA1770E), fontWeight: FontWeight.bold, fontSize: 24)
+                  style: GoogleFonts.poppins(color: Color(0xFF7D5E00), fontWeight: FontWeight.bold, fontSize: 26)
                 ),
               ),
         actions: [
           IconButton(
-            icon: Icon(_isSearching ? Icons.close : Icons.search, color: Color(0xFFA1770E), size: 30),
+            icon: Icon(_isSearching ? Icons.close : Icons.search, color: Color(0xFF7D5E00), size: 30),
             onPressed: () {
               setState(() {
                 _isSearching = !_isSearching;
@@ -82,7 +84,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
               ],
             ),
           ),
-          Divider(color: Color(0xFFA1770E), thickness: 1, indent: 20, endIndent: 20),
+          Divider(color: Color(0xFF7D5E00), thickness: 1, indent: 20, endIndent: 20),
 
           // --- CHAT LIST ---
           Expanded(
@@ -90,11 +92,11 @@ class _MessagesScreenState extends State<MessagesScreen> {
               stream: DatabaseService(uid: user?.uid).userChats,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator(color: Color(0xFFA1770E)));
+                  return Center(child: CircularProgressIndicator(color: Color(0xFFB78A00)));
                 }
 
                 if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                  return Center(child: Text("No messages yet", style: TextStyle(color: Colors.grey)));
+                  return Center(child: Text("No messages yet", style: GoogleFonts.poppins(color: Colors.grey)));
                 }
 
                 // 1. Convert docs to list
@@ -126,7 +128,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
                 }
 
                 if (docs.isEmpty) {
-                  return Center(child: Text("No results found", style: TextStyle(color: Colors.grey)));
+                  return Center(child: Text("No results found", style: GoogleFonts.poppins(color: Colors.grey)));
                 }
 
                 return ListView.builder(
@@ -170,7 +172,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         child: Text(
           text,
-          style: TextStyle(
+          style: GoogleFonts.poppins(
             fontWeight: FontWeight.bold,
             color: isActive ? Color(0xFFA1770E) : Colors.brown[300], // Highlight active
             fontSize: 16,
@@ -222,7 +224,7 @@ class ChatListTile extends StatelessWidget {
         margin: EdgeInsets.only(bottom: 15),
         padding: EdgeInsets.all(15),
         decoration: BoxDecoration(
-          color: Color(0xFFFFFDE7),
+          color: Color(0xFFFFF7D4),
           borderRadius: BorderRadius.circular(20),
           border: isUnread ? Border.all(color: Color(0xFFA1770E), width: 1.5) : null,
         ),
@@ -231,7 +233,7 @@ class ChatListTile extends StatelessWidget {
             // Avatar
             CircleAvatar(
               radius: 25,
-              backgroundColor: Color(0xFFA1770E),
+              backgroundColor: Color(0xFF7D5E00),
               child: Icon(Icons.person, color: Colors.white),
             ),
             SizedBox(width: 15),
@@ -255,16 +257,16 @@ class ChatListTile extends StatelessWidget {
                           }
                           return Text(
                             name,
-                            style: TextStyle(
+                            style: GoogleFonts.poppins(
                               fontWeight: FontWeight.bold, 
                               fontSize: 16,
-                              color: Color(0xFFA1770E)
+                              color: Color(0xFF7D5E00)
                             )
                           );
                         },
                       ),
                       // Time Placeholder (You can add real logic if needed)
-                      Text("Recent", style: TextStyle(fontSize: 10, color: Colors.brown)),
+                      Text("Recent", style: GoogleFonts.poppins(fontSize: 10, color: Color(0xFF7D5E00))),
                     ],
                   ),
                   SizedBox(height: 5),
@@ -272,8 +274,8 @@ class ChatListTile extends StatelessWidget {
                     data['lastMessage'] ?? "Start chatting...",
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: Colors.brown[400],
+                    style: GoogleFonts.poppins(
+                      color: Color(0xFF7D5E00),
                       fontWeight: isUnread ? FontWeight.bold : FontWeight.normal
                     ),
                   ),
@@ -287,7 +289,7 @@ class ChatListTile extends StatelessWidget {
                 margin: EdgeInsets.only(left: 10),
                 padding: EdgeInsets.all(6),
                 decoration: BoxDecoration(color: Colors.red, shape: BoxShape.circle),
-                child: Text("$unread", style: TextStyle(color: Colors.white, fontSize: 10)),
+                child: Text("$unread", style: GoogleFonts.poppins(color: Colors.white, fontSize: 10)),
               )
           ],
         ),

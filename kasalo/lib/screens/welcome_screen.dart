@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart'; 
 
 class WelcomeScreen extends StatelessWidget {
   @override
@@ -10,42 +11,38 @@ class WelcomeScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Placeholder for Logo (Frontend dev will replace this later)
+            
+            // --- LOGO SECTION ---
             Container(
-              height: 150,
-              width: 150,
-              decoration: BoxDecoration(
-                color: Colors.grey[300], // Placeholder color
-                shape: BoxShape.circle,
-              ),
-              child: Center(
-                child: Text(
-                  "Logo Here",
-                  style: TextStyle(color: Colors.grey[600]),
-                ),
+              height: 250,
+              width: 250,
+              child: Image.asset(
+                'assets/icons/kasalo logo.png',
+                fit: BoxFit.contain,
               ),
             ),
             
             SizedBox(height: 40),
 
-            // The Text from your design
+            // --- TEXT SECTION (Poppins applied) ---
             Text(
               "Magbigay ayon sa kakayahan,\nKumuha batay sa pangangailangan.",
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 18,
+              // 2. Use GoogleFonts.poppins here
+              style: GoogleFonts.poppins( 
+                fontSize: 17,
                 fontWeight: FontWeight.bold,
-                color: Colors.brown[800], // Matching the earthy tone in the image
+                color: Color(0xFF7D5E00),
               ),
             ),
             
             SizedBox(height: 50),
 
-            // Sign In Button
+            // --- SIGN IN BUTTON ---
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xFFF3E5AB), // Beige/Yellowish color from design
-                foregroundColor: Colors.brown[900], // Text color
+                backgroundColor: Color(0xFFF7E28C),
+                foregroundColor: Color(0xFF7D5E00),
                 padding: EdgeInsets.symmetric(vertical: 15),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30),
@@ -53,18 +50,22 @@ class WelcomeScreen extends StatelessWidget {
               ),
               child: Text(
                 "Sign In",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                // 3. Applied Poppins to button text too
+                style: GoogleFonts.poppins(
+                  fontSize: 16, 
+                  fontWeight: FontWeight.bold
+                ),
               ),
               onPressed: () => Navigator.pushNamed(context, '/login'),
             ),
 
             SizedBox(height: 20),
 
-            // Sign Up Button
+            // --- SIGN UP BUTTON ---
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xFFF3E5AB), // Beige/Yellowish color
-                foregroundColor: Colors.brown[900], // Text color
+                backgroundColor: Color(0xFFF7E28C),
+                foregroundColor: Color(0xFF7D5E00),
                 padding: EdgeInsets.symmetric(vertical: 15),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30),
@@ -72,7 +73,11 @@ class WelcomeScreen extends StatelessWidget {
               ),
               child: Text(
                 "Sign Up",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                // 4. Applied Poppins to button text too
+                style: GoogleFonts.poppins(
+                  fontSize: 16, 
+                  fontWeight: FontWeight.bold
+                ),
               ),
               onPressed: () => Navigator.pushNamed(context, '/register'),
             ),

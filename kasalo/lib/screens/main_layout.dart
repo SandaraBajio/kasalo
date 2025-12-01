@@ -43,12 +43,12 @@ class _MainLayoutState extends State<MainLayout> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
-        selectedItemColor: Color(0xFFA1770E), // Dark Gold
-        unselectedItemColor: Color(0xFFF9E27F), // Light Gold
+        selectedItemColor: Color(0xFF7D5E00), // Dark Gold
+        unselectedItemColor: Color(0xFFDBB051), // Light Gold
         showSelectedLabels: false,
         showUnselectedLabels: false,
         type: BottomNavigationBarType.fixed,
-        backgroundColor: Color(0xFFFFFDE7), // Cream
+        backgroundColor: Color(0xFFFFF7D4), // Cream
         items: [
           // Home
           BottomNavigationBarItem(

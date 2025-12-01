@@ -4,6 +4,7 @@ import 'package:geolocator/geolocator.dart'; // For GPS
 import 'package:geocoding/geocoding.dart';   // For Address Text
 import '../services/auth_service.dart';
 import '../services/database_service.dart';
+import 'package:google_fonts/google_fonts.dart'; 
 
 class RegistrationScreen extends StatefulWidget {
   @override
@@ -78,12 +79,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   // Helper for Input Style
   InputDecoration customInputDecoration(String label, {Widget? suffixIcon}) {
     // Colors from your design
-    final Color borderColor = Color(0xFF8D6E63);
+    final Color borderColor = Color(0xFF7D5E00);
     final Color textColor = Color(0xFF5D4037);
     
     return InputDecoration(
       labelText: label,
-      labelStyle: TextStyle(color: textColor),
+      // Applied Poppins here for the placeholder labels
+      labelStyle: GoogleFonts.poppins(color: textColor), 
       contentPadding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
       suffixIcon: suffixIcon, // Add icon support
       enabledBorder: OutlineInputBorder(
@@ -102,8 +104,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   @override
   Widget build(BuildContext context) {
     final Color backgroundColor = Color(0xFFFFFDE7);
-    final Color buttonColor = Color(0xFFF9E27F);
-    final Color textColor = Color(0xFF5D4037);
+    final Color buttonColor = Color(0xFFF7E28C);
+    final Color textColor = Color(0xFF7D5E00);
 
     return Scaffold(
       backgroundColor: backgroundColor,
@@ -118,7 +120,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   TextButton.icon(
                     onPressed: () => Navigator.pop(context),
                     icon: Icon(Icons.arrow_back_ios, size: 18, color: textColor),
-                    label: Text("Back", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: textColor)),
+                    // Applied Poppins to Back Button
+                    label: Text("Back", style: GoogleFonts.poppins(fontSize: 18, color: textColor)),
                   ),
                 ],
               ),
@@ -140,12 +143,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     key: _formKey,
                     child: Column(
                       children: [
-                        Text("SIGN UP", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xFFA1887F))),
+                        // Applied Poppins to Title
+                        Text("SIGN UP", style: GoogleFonts.poppins(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xFFB78A00))),
                         SizedBox(height: 30),
 
                         // Full Name
                         TextFormField(
                           decoration: customInputDecoration('Full name'),
+                          style: GoogleFonts.poppins(), // Input text style
                           validator: (val) => val!.isEmpty ? 'Enter name' : null,
                           onChanged: (val) => setState(() => fullName = val),
                         ),
@@ -154,6 +159,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         // Email
                         TextFormField(
                           decoration: customInputDecoration('Email'),
+                          style: GoogleFonts.poppins(),
                           validator: (val) => val!.isEmpty ? 'Enter email' : null,
                           onChanged: (val) => setState(() => email = val),
                         ),
@@ -162,6 +168,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         // Contact Number
                         TextFormField(
                           decoration: customInputDecoration('Contact Number'),
+                          style: GoogleFonts.poppins(),
                           keyboardType: TextInputType.phone,
                           validator: (val) => val!.isEmpty ? 'Enter contact' : null,
                           onChanged: (val) => setState(() => contactNumber = val),
@@ -171,6 +178,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         // Age
                         TextFormField(
                           decoration: customInputDecoration('Age'),
+                          style: GoogleFonts.poppins(),
                           keyboardType: TextInputType.number,
                           validator: (val) => val!.isEmpty ? 'Enter age' : null,
                           onChanged: (val) => setState(() => age = val),
@@ -180,12 +188,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         // --- NEW ADDRESS FIELD WITH AUTO-DETECT ---
                         TextFormField(
                           controller: _addressController, // Use controller to update text
+                          style: GoogleFonts.poppins(),
                           decoration: customInputDecoration(
                             'Address',
                             suffixIcon: IconButton(
                               icon: gettingLocation 
                                 ? SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2)) 
-                                : Icon(Icons.my_location, color: Colors.green),
+                                : Icon(Icons.my_location, color: Color(0xFF7D5E00)),
                               onPressed: _getCurrentLocation, // Trigger detection
                             ),
                           ),
@@ -197,6 +206,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         // Password
                         TextFormField(
                           decoration: customInputDecoration('Password'),
+                          style: GoogleFonts.poppins(),
                           obscureText: true,
                           validator: (val) => val!.length < 6 ? 'Min 6 chars' : null,
                           onChanged: (val) => setState(() => password = val),
@@ -214,7 +224,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             ),
                             child: Text(
                               loading ? "Creating..." : "Register",
-                              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: textColor),
+                              // Applied Poppins to Button Text
+                              style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.bold, color: textColor),
                             ),
                             onPressed: () async {
                               if (_formKey.currentState!.validate()) {
@@ -238,7 +249,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           ),
                         ),
                         SizedBox(height: 10),
-                        Text(error, style: TextStyle(color: Colors.red)),
+                        // Applied Poppins to Error Text
+                        Text(error, style: GoogleFonts.poppins(color: Colors.red)),
                       ],
                     ),
                   ),

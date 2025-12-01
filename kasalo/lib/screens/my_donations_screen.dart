@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../services/database_service.dart';
-import 'donation_detail_screen.dart'; // Import details screen
+import 'donation_detail_screen.dart';
+import 'package:google_fonts/google_fonts.dart'; 
 
 class MyDonationsScreen extends StatelessWidget {
   final User? user = FirebaseAuth.instance.currentUser;
@@ -16,24 +17,35 @@ class MyDonationsScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        // 1. ADD THIS: Tells Flutter NOT to put a back button automatically
         automaticallyImplyLeading: false, 
+        centerTitle: false, 
         
-        // 2. REMOVED: The 'leading' IconButton block is deleted here.
+        // 1. INCREASE THE APP BAR HEIGHT
+        toolbarHeight: 70, 
         
+        // Title on the Left
+        title: Padding(
+          padding: const EdgeInsets.only(left: 10),
+          child: Text(
+            "My Donations",
+            style: GoogleFonts.poppins(
+              color: Color(0xFFA1770E), 
+              fontSize: 26, 
+              fontWeight: FontWeight.bold
+            ),
+          ),
+        ),
+
+        // Image on the Right
         actions: [
           Padding(
-            padding: const EdgeInsets.only(right: 20),
+            padding: const EdgeInsets.only(right: 20, bottom: 8),
             child: Center(
-              child: Text(
-                "kasalo",
-                style: TextStyle(
-                  color: Color(0xFFF9E27F), 
-                  fontWeight: FontWeight.bold, 
-                  fontSize: 24, 
-                  letterSpacing: 1.0,
-                  shadows: [Shadow(color: Colors.black12, offset: Offset(1,1), blurRadius: 1)]
-                ),
+              child: Image.asset(
+                'assets/icons/name.png', 
+                // 2. NOW YOU CAN MAKE THIS BIGGER
+                height: 40, 
+                fit: BoxFit.contain, 
               ),
             ),
           )
@@ -43,14 +55,6 @@ class MyDonationsScreen extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: Text(
-              "My Donations",
-              style: TextStyle(color: Color(0xFFA1770E), fontSize: 22, fontWeight: FontWeight.bold),
-            ),
-          ),
-
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
               stream: DatabaseService(uid: user?.uid).userDonations,
@@ -60,11 +64,11 @@ class MyDonationsScreen extends StatelessWidget {
                 }
 
                 if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                  return Center(child: Text("No donations yet", style: TextStyle(color: Colors.grey)));
+                  return Center(child: Text("No donations yet", style: GoogleFonts.poppins(color: Colors.grey)));
                 }
 
                 return ListView.builder(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   itemCount: snapshot.data!.docs.length,
                   itemBuilder: (context, index) {
                     DocumentSnapshot doc = snapshot.data!.docs[index];
@@ -84,7 +88,6 @@ class MyDonationsScreen extends StatelessWidget {
   // --- CARD WIDGET ---
   Widget _buildMyDonationCard(BuildContext context, Map<String, dynamic> data, String docId) {
     return GestureDetector(
-      // Navigates to Details Screen
       onTap: () {
         Navigator.push(
           context,
@@ -100,7 +103,7 @@ class MyDonationsScreen extends StatelessWidget {
         margin: EdgeInsets.only(bottom: 15),
         padding: EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: Color(0xFFF9E27F).withOpacity(0.6),
+          color: Color(0xFFF9E27F),
           borderRadius: BorderRadius.circular(20),
         ),
         child: Row(
@@ -126,10 +129,10 @@ class MyDonationsScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(data['title'] ?? "Item", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.brown[800], fontSize: 16)),
+                  Text(data['title'] ?? "Item", style: GoogleFonts.poppins(fontWeight: FontWeight.bold, color: Colors.brown[800], fontSize: 16)),
                   SizedBox(height: 4),
-                  Text("Category: ${data['category'] ?? '-'}", style: TextStyle(fontSize: 12, color: Colors.brown[700])),
-                  Text("Location: ${data['location'] ?? '-'}", style: TextStyle(fontSize: 12, color: Colors.brown[700])),
+                  Text("Category: ${data['category'] ?? '-'}", style: GoogleFonts.poppins(fontSize: 12, color: Colors.brown[700])),
+                  Text("Location: ${data['location'] ?? '-'}", style: GoogleFonts.poppins(fontSize: 12, color: Colors.brown[700])),
                   SizedBox(height: 10),
                   
                   // Status Badge
@@ -141,7 +144,7 @@ class MyDonationsScreen extends StatelessWidget {
                     ),
                     child: Text(
                       "Status: ${data['status'] ?? 'Available'}",
-                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12),
+                      style: GoogleFonts.poppins(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12),
                     ),
                   ),
                 ],

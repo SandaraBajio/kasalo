@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../services/database_service.dart';
 import 'chat_screen.dart';
+import 'package:google_fonts/google_fonts.dart'; 
 
 class DonationDetailScreen extends StatelessWidget {
   final Map<String, dynamic> data;
@@ -36,8 +37,8 @@ class DonationDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color primaryColor = Color(0xFFA1770E);
-    final Color accentColor = Color(0xFFF9E27F);
+    final Color primaryColor = Color(0xFFB78A00);
+    final Color accentColor = Color(0xFFF7E28C);
     final User? user = FirebaseAuth.instance.currentUser;
 
     // CHECK: Am I the owner?
@@ -51,10 +52,10 @@ class DonationDetailScreen extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios, color: Colors.brown),
+          icon: Icon(Icons.arrow_back_ios, color: Color(0xFF7D5E00)),
           onPressed: () => Navigator.pop(context),
         ),
-        title: Text("Item Details", style: TextStyle(color: Colors.brown, fontWeight: FontWeight.bold)),
+        title: Text("Item Details", style: GoogleFonts.poppins(color: Color(0xFF7D5E00), fontWeight: FontWeight.bold)),
         centerTitle: true,
       ),
       body: Column(
@@ -82,7 +83,7 @@ class DonationDetailScreen extends StatelessWidget {
 
                         // B. Show Placeholder if empty
                         if (images.isEmpty) {
-                          return Center(child: Icon(Icons.image_not_supported, size: 60, color: Colors.grey));
+                          return Center(child: Icon(Icons.image_not_supported, size: 60, color: Color(0xFF7D5E00)));
                         }
 
                         // C. Build the Swiper
@@ -92,14 +93,29 @@ class DonationDetailScreen extends StatelessWidget {
                             PageView.builder(
                               itemCount: images.length,
                               itemBuilder: (context, index) {
-                                return Image.network(
-                                  images[index],
-                                  fit: BoxFit.cover,
-                                  loadingBuilder: (context, child, loadingProgress) {
-                                    if (loadingProgress == null) return child;
-                                    return Center(child: CircularProgressIndicator(color: primaryColor));
+                                return GestureDetector(
+                                  onTap: () {
+                                    // --- UPDATED NAVIGATION ---
+                                    // Pass the list and the current index
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) => FullScreenImageView(
+                                          imageUrls: images, // Pass List
+                                          initialIndex: index, // Pass Index
+                                        ),
+                                      ),
+                                    );
                                   },
-                                  errorBuilder: (context, error, stackTrace) => Icon(Icons.broken_image, color: Colors.grey),
+                                  child: Image.network(
+                                    images[index],
+                                    fit: BoxFit.cover,
+                                    loadingBuilder: (context, child, loadingProgress) {
+                                      if (loadingProgress == null) return child;
+                                      return Center(child: CircularProgressIndicator(color: primaryColor));
+                                    },
+                                    errorBuilder: (context, error, stackTrace) => Icon(Icons.broken_image, color: Colors.grey),
+                                  ),
                                 );
                               },
                             ),
@@ -145,22 +161,22 @@ class DonationDetailScreen extends StatelessWidget {
                               ),
                               child: Text(
                                 data['status'] ?? 'Available',
-                                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                                style: GoogleFonts.poppins(color: Colors.white, fontWeight: FontWeight.bold),
                               ),
                             ),
-                            Text(timeAgo, style: TextStyle(color: Colors.grey)),
+                            Text(timeAgo, style: GoogleFonts.poppins(color: Colors.grey)),
                           ],
                         ),
                         SizedBox(height: 15),
 
                         Text(
                           data['title'] ?? "No Title",
-                          style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: Colors.brown[900]),
+                          style: GoogleFonts.poppins(fontSize: 26, fontWeight: FontWeight.bold, color: Color(0xFF7D5E00)),
                         ),
 
                         Text(
                           "${data['quantity']} ${data['unit']}",
-                          style: TextStyle(fontSize: 18, color: Colors.brown[600], fontWeight: FontWeight.w500),
+                          style: GoogleFonts.poppins(fontSize: 18, color: Color(0xFF7D5E00), fontWeight: FontWeight.w500),
                         ),
 
                         SizedBox(height: 20),
@@ -180,7 +196,7 @@ class DonationDetailScreen extends StatelessWidget {
                         SizedBox(height: 20),
 
                         // --- DONOR DETAILS ---
-                        Text("Donor Details", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.brown[800])),
+                        Text("Donor Details", style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF7D5E00))),
                         SizedBox(height: 10),
 
                         FutureBuilder<DocumentSnapshot>(
@@ -198,10 +214,10 @@ class DonationDetailScreen extends StatelessWidget {
                               contentPadding: EdgeInsets.zero,
                               leading: CircleAvatar(
                                 backgroundColor: accentColor,
-                                child: Icon(Icons.person, color: Colors.brown),
+                                child: Icon(Icons.person, color: Color(0xFF7D5E00)),
                               ),
-                              title: Text(donorName, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                              subtitle: Text(subtitle),
+                              title: Text(donorName, style: GoogleFonts.poppins(fontWeight: FontWeight.bold, fontSize: 16)),
+                              subtitle: Text(subtitle, style: GoogleFonts.poppins()),
                             );
                           },
                         ),
@@ -244,7 +260,7 @@ class DonationDetailScreen extends StatelessWidget {
           children: [
             Icon(Icons.hourglass_empty, color: Colors.orange),
             SizedBox(width: 10),
-            Text("Waiting for requests...", style: TextStyle(color: Colors.orange[800], fontWeight: FontWeight.bold)),
+            Text("Waiting for requests...", style: GoogleFonts.poppins(color: Colors.orange[800], fontWeight: FontWeight.bold)),
           ],
         ),
       );
@@ -269,7 +285,7 @@ class DonationDetailScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Request Status:", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.brown)),
+              Text("Request Status:", style: GoogleFonts.poppins(fontWeight: FontWeight.bold, color: Colors.brown)),
               SizedBox(height: 10),
               Row(
                 children: [
@@ -278,8 +294,8 @@ class DonationDetailScreen extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("Requested by:", style: TextStyle(fontSize: 12, color: Colors.grey)),
-                      Text(requesterName, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFFA1770E))),
+                      Text("Requested by:", style: GoogleFonts.poppins(fontSize: 12, color: Colors.grey)),
+                      Text(requesterName, style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFFA1770E))),
                     ],
                   ),
                   Spacer(),
@@ -289,7 +305,6 @@ class DonationDetailScreen extends StatelessWidget {
                       final User? user = FirebaseAuth.instance.currentUser;
                       if (user == null) return;
 
-                      // Fix Image URL
                       String imgUrl = '';
                       if (data['imageUrls'] != null && (data['imageUrls'] as List).isNotEmpty) {
                         imgUrl = data['imageUrls'][0];
@@ -299,9 +314,9 @@ class DonationDetailScreen extends StatelessWidget {
 
                       String chatId = await DatabaseService(uid: user.uid).createChat(
                           data['requesterId'], 
-                          documentId, // Pass ID
+                          documentId, 
                           data['title'], 
-                          imgUrl // Pass Image
+                          imgUrl 
                       );
 
                       Navigator.push(
@@ -310,7 +325,7 @@ class DonationDetailScreen extends StatelessWidget {
                           builder: (context) => ChatScreen(
                             chatId: chatId,
                             otherUserId: data['requesterId'],
-                            itemId: documentId, // *** ADDED THIS ***
+                            itemId: documentId, 
                             itemTitle: data['title'],
                             itemImageUrl: imgUrl,
                           ),
@@ -333,9 +348,9 @@ class DonationDetailScreen extends StatelessWidget {
       height: 50,
       child: ElevatedButton.icon(
         icon: Icon(Icons.settings, color: Colors.white),
-        label: Text("Manage Donation", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white)),
+        label: Text("Manage Donation", style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white)),
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.blueGrey,
+          backgroundColor: Color(0xFF7D5E00),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
         ),
         onPressed: () => _showManageDialog(context),
@@ -349,7 +364,7 @@ class DonationDetailScreen extends StatelessWidget {
         Expanded(
           child: OutlinedButton.icon(
             icon: Icon(Icons.chat_bubble_outline, color: primaryColor),
-            label: Text("Message"),
+            label: Text("Message", style: GoogleFonts.poppins(color: Color(0xFFB78A00), fontWeight: FontWeight.bold)),
             style: OutlinedButton.styleFrom(
               side: BorderSide(color: primaryColor, width: 2),
               padding: EdgeInsets.symmetric(vertical: 15),
@@ -360,7 +375,6 @@ class DonationDetailScreen extends StatelessWidget {
               final User? user = FirebaseAuth.instance.currentUser;
               if (user == null) return;
 
-              // Fix Image URL
               String imgUrl = '';
               if (data['imageUrls'] != null && (data['imageUrls'] as List).isNotEmpty) {
                 imgUrl = data['imageUrls'][0];
@@ -370,9 +384,9 @@ class DonationDetailScreen extends StatelessWidget {
 
               String chatId = await DatabaseService(uid: user.uid).createChat(
                   data['donorId'], 
-                  documentId, // Pass ID
+                  documentId, 
                   data['title'], 
-                  imgUrl // Pass Image
+                  imgUrl 
               );
 
               Navigator.push(
@@ -381,7 +395,7 @@ class DonationDetailScreen extends StatelessWidget {
                   builder: (context) => ChatScreen(
                     chatId: chatId,
                     otherUserId: data['donorId'],
-                    itemId: documentId, // *** ADDED THIS ***
+                    itemId: documentId, 
                     itemTitle: data['title'],
                     itemImageUrl: imgUrl,
                   ),
@@ -394,9 +408,9 @@ class DonationDetailScreen extends StatelessWidget {
         Expanded(
           child: ElevatedButton.icon(
             icon: Icon(Icons.volunteer_activism, color: Colors.white),
-            label: Text("Request Item"),
+            label: Text("Request Item", style: GoogleFonts.poppins(color: Colors.white, fontWeight: FontWeight.bold)),
             style: ElevatedButton.styleFrom(
-              backgroundColor: primaryColor,
+              backgroundColor: Color(0xFFB78A00),
               padding: EdgeInsets.symmetric(vertical: 15),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
             ),
@@ -410,38 +424,112 @@ class DonationDetailScreen extends StatelessWidget {
   void _showManageDialog(BuildContext context) {
     showDialog(
       context: context,
-      builder: (context) => SimpleDialog(
-        title: Text("Manage Donation", style: TextStyle(color: Color(0xFFA1770E), fontWeight: FontWeight.bold)),
-        children: [
-          SimpleDialogOption(
-            padding: EdgeInsets.all(20),
-            child: Text("Mark as Available (Show on Feed)"),
-            onPressed: () {
-              DatabaseService().updateDonationStatus(documentId, 'Available');
-              Navigator.pop(context);
-              Navigator.pop(context);
-            },
+      builder: (context) => Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+        backgroundColor: Colors.white,
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                "Manage Donation",
+                style: GoogleFonts.poppins(
+                  fontSize: 22, 
+                  fontWeight: FontWeight.bold, 
+                  color: Color(0xFFB78A00)
+                ),
+              ),
+              SizedBox(height: 25),
+              _buildManageOption(
+                icon: Icons.visibility,
+                color: Colors.blue,
+                title: "Mark as Available",
+                subtitle: "Show item on the public feed",
+                onTap: () {
+                  DatabaseService().updateDonationStatus(documentId, 'Available');
+                  Navigator.pop(context); 
+                  Navigator.pop(context); 
+                },
+              ),
+              SizedBox(height: 15),
+              _buildManageOption(
+                icon: Icons.check_circle,
+                color: Colors.green,
+                title: "Mark as Completed",
+                subtitle: "Hide item from the public feed",
+                onTap: () {
+                  DatabaseService().updateDonationStatus(documentId, 'Completed');
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                },
+              ),
+              SizedBox(height: 20),
+              Divider(thickness: 1, color: Colors.grey[200]),
+              SizedBox(height: 10),
+              InkWell(
+                onTap: () {
+                   DatabaseService().deleteDonation(documentId);
+                   Navigator.pop(context);
+                   Navigator.pop(context);
+                },
+                borderRadius: BorderRadius.circular(15),
+                child: Container(
+                  padding: EdgeInsets.symmetric(vertical: 12, horizontal: 15),
+                  decoration: BoxDecoration(
+                    color: Colors.red[50],
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.delete_forever, color: Colors.red),
+                      SizedBox(width: 10),
+                      Text("Delete Permanently", style: GoogleFonts.poppins(color: Colors.red, fontWeight: FontWeight.bold)),
+                    ],
+                  ),
+                ),
+              )
+            ],
           ),
-          SimpleDialogOption(
-            padding: EdgeInsets.all(20),
-            child: Text("Mark as Completed (Remove from Feed)"),
-            onPressed: () {
-              DatabaseService().updateDonationStatus(documentId, 'Completed');
-              Navigator.pop(context);
-              Navigator.pop(context);
-            },
-          ),
-          Divider(),
-          SimpleDialogOption(
-            padding: EdgeInsets.all(20),
-            child: Text("Delete Permanently", style: TextStyle(color: Colors.red)),
-            onPressed: () {
-              DatabaseService().deleteDonation(documentId);
-              Navigator.pop(context);
-              Navigator.pop(context);
-            },
-          ),
-        ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildManageOption({required IconData icon, required Color color, required String title, required String subtitle, required VoidCallback onTap}) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(15),
+      child: Container(
+        padding: EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.grey[200]!),
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: color.withOpacity(0.1),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(icon, color: color, size: 24),
+            ),
+            SizedBox(width: 15),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(title, style: GoogleFonts.poppins(fontWeight: FontWeight.bold, color: Colors.black87)),
+                  Text(subtitle, style: GoogleFonts.poppins(fontSize: 12, color: Colors.grey)),
+                ],
+              ),
+            ),
+            Icon(Icons.arrow_forward_ios, size: 14, color: Colors.grey),
+          ],
+        ),
       ),
     );
   }
@@ -451,7 +539,7 @@ class DonationDetailScreen extends StatelessWidget {
     if (user == null) return;
 
     if (data['donorId'] == user.uid) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("You cannot request your own item!")));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("You cannot request your own item!", style: GoogleFonts.poppins())));
       return;
     }
 
@@ -460,10 +548,10 @@ class DonationDetailScreen extends StatelessWidget {
         'requesterId': user.uid,
         'status': 'Pending',
       });
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Request Sent!")));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Request Sent!", style: GoogleFonts.poppins())));
       Navigator.pop(context);
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error requesting item")));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error requesting item", style: GoogleFonts.poppins())));
     }
   }
 
@@ -481,11 +569,50 @@ class DonationDetailScreen extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(label, style: TextStyle(color: Colors.grey[600], fontSize: 12)),
-              Text(value ?? "N/A", style: TextStyle(color: Colors.brown[800], fontWeight: FontWeight.bold, fontSize: 16)),
+              Text(label, style: GoogleFonts.poppins(color: Colors.grey[600], fontSize: 12)),
+              Text(value ?? "N/A", style: GoogleFonts.poppins(color: Colors.brown[800], fontWeight: FontWeight.bold, fontSize: 16)),
             ],
           ),
         ],
+      ),
+    );
+  }
+}
+
+// --- UPDATED FULL SCREEN IMAGE WIDGET WITH SWIPING ---
+class FullScreenImageView extends StatelessWidget {
+  final List<dynamic> imageUrls;
+  final int initialIndex;
+
+  const FullScreenImageView({required this.imageUrls, required this.initialIndex});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        iconTheme: IconThemeData(color: Colors.white),
+      ),
+      // Use PageView to allow sliding between images
+      body: PageView.builder(
+        controller: PageController(initialPage: initialIndex),
+        itemCount: imageUrls.length,
+        itemBuilder: (context, index) {
+          return Center(
+            child: InteractiveViewer(
+              panEnabled: true, // Allow panning
+              boundaryMargin: EdgeInsets.all(20),
+              minScale: 0.5,
+              maxScale: 4.0,
+              child: Image.network(
+                imageUrls[index],
+                fit: BoxFit.contain, // Ensures the full image is visible
+              ),
+            ),
+          );
+        },
       ),
     );
   }

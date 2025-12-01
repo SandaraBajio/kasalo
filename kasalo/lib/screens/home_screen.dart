@@ -5,6 +5,8 @@ import '../services/auth_service.dart';
 import '../services/database_service.dart';
 import 'add_donation_screen.dart';
 import 'donation_detail_screen.dart';
+import 'package:google_fonts/google_fonts.dart'; 
+
 
 class HomeScreen extends StatefulWidget {
   static bool welcomeShown = false;
@@ -62,31 +64,34 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               Container(
-                height: 80, width: 80,
-                decoration: BoxDecoration(color: Color(0xFFF9E27F), shape: BoxShape.circle),
-                child: Icon(Icons.volunteer_activism, color: Colors.brown, size: 40),
+                height: 200,
+                width: 200,
+                child: Image.asset(
+                  'assets/icons/kasalo logo.png',
+                  fit: BoxFit.contain,
+                ),
               ),
               SizedBox(height: 10),
-              Text("kasalo", style: TextStyle(color: Color(0xFFF9E27F), fontWeight: FontWeight.bold, fontSize: 20)),
-              SizedBox(height: 15),
-              Text("Welcome, $name!", style: TextStyle(color: Color(0xFFA1887F), fontWeight: FontWeight.bold, fontSize: 22)),
+              Text("Welcome, $name!", 
+              textAlign: TextAlign.center,
+              style: GoogleFonts.abrilFatface(color: Color(0xFFB78A00), fontWeight: FontWeight.bold, fontSize: 22)),
               SizedBox(height: 10),
               Text(
                 "Kasalo connects those with plenty to those in need, ensuring that valuable resources are used, not discarded.",
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 12, color: Colors.brown[600]),
+                style: GoogleFonts.poppins(fontSize: 14, color: Color(0xFF7D5E00)),
               ),
               SizedBox(height: 10),
               Text(
                 "'Magbigay ayon sa kakayahan,\nkumuha batay sa pangangailangan.'",
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, fontStyle: FontStyle.italic, color: Colors.brown[800]),
+                style: GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.bold, fontStyle: FontStyle.italic, color: Color(0xFF7D5E00)),
               ),
               SizedBox(height: 10),
               Text(
                 "Aligned with the SDG 12: Responsible Consumption and Production.",
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 10, color: Colors.grey[600]),
+                style: GoogleFonts.poppins(fontSize: 11, color: Color(0xFF7D5E00)),
               ),
             ],
           ),
@@ -113,7 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
         // We use a Builder to get the correct context to open the drawer
         leading: Builder(
           builder: (context) => IconButton(
-            icon: Icon(Icons.menu, color: Colors.brown),
+            icon: Icon(Icons.menu, color: Color(0xFF7D5E00)),
             onPressed: () => Scaffold.of(context).openDrawer(),
           ),
         ),
@@ -125,9 +130,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 decoration: InputDecoration(
                   hintText: "Search items...",
                   border: InputBorder.none,
-                  hintStyle: TextStyle(color: Colors.grey),
+                  hintStyle: TextStyle(color: Color(0xFF7D5E00)),
                 ),
-                style: TextStyle(color: Colors.brown, fontSize: 18),
+                style: TextStyle(color: Color(0xFF7D5E00), fontSize: 20),
                 onChanged: (val) {
                   setState(() {
                     _searchQuery = val.toLowerCase();
@@ -135,15 +140,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
               )
             : Center(
-                child: Text(
-                  "kasalo", 
-                  style: TextStyle(color: Color(0xFFF9E27F), fontWeight: FontWeight.bold, fontSize: 24, letterSpacing: 1.5)
-                )
+              child: Image.asset(
+                'assets/icons/name.png', // Replace with your actual image path
+                height: 40, // Control the height so it fits nicely in the AppBar
+                fit: BoxFit.contain, // Ensures the image doesn't distort
               ),
+            ),
         
         actions: [
           IconButton(
-            icon: Icon(_isSearching ? Icons.close : Icons.search, color: Colors.brown),
+            icon: Icon(_isSearching ? Icons.close : Icons.search, color: Color(0xFF7D5E00)),
             onPressed: () {
               setState(() {
                 _isSearching = !_isSearching;
@@ -164,10 +170,28 @@ class _HomeScreenState extends State<HomeScreen> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              // CHANGE THIS: 'start' -> 'stretch'
+              crossAxisAlignment: CrossAxisAlignment.stretch, 
               children: [
-                Text("Browse Donations", style: TextStyle(color: Colors.brown[800], fontSize: 20, fontWeight: FontWeight.bold)),
-                Text("Based on your address", style: TextStyle(color: Color(0xFFF9E27F), fontSize: 14, fontWeight: FontWeight.bold, fontStyle: FontStyle.italic)),
+                Text(
+                  "Browse Donations",
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.poppins(
+                    color: Color(0xFF7D5E00),
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  "Based on your address",
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.poppins(
+                    color: Color(0xFFB78A00),
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
               ],
             ),
           ),
@@ -178,7 +202,7 @@ class _HomeScreenState extends State<HomeScreen> {
               stream: DatabaseService().donations,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator(color: Color(0xFFF9E27F)));
+                  return Center(child: CircularProgressIndicator(color: Color(0xFFF7E28C)));
                 }
 
                 if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
@@ -225,7 +249,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
 
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Color(0xFFA1770E),
+        backgroundColor: Color(0xFFB78A00),
         child: Icon(Icons.add, size: 30, color: Colors.white),
         onPressed: () {
           Navigator.push(
@@ -241,13 +265,13 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildDrawer() {
     return Drawer(
       child: Container(
-        color: creamColor, // Cream Background
+        color: Color(0xFFFFFCEE), // Cream Background
         child: Column(
           children: [
             // --- HEADER: Profile & Name ---
             Container(
               width: double.infinity,
-              padding: EdgeInsets.only(top: 60, bottom: 20),
+              padding: EdgeInsets.only(top: 80, bottom: 20),
               child: FutureBuilder<DocumentSnapshot>(
                 future: DatabaseService(uid: user?.uid).getUserData(),
                 builder: (context, snapshot) {
@@ -272,7 +296,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       // Name
                       Text(
                         name,
-                        style: TextStyle(
+                        style: GoogleFonts.poppins(
                           fontSize: 20, 
                           fontWeight: FontWeight.bold, 
                           color: primaryColor
@@ -284,13 +308,13 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             
-            Divider(color: primaryColor, thickness: 1.5, indent: 20, endIndent: 20),
+            Divider(color: primaryColor, thickness: 1.5, indent: 0, endIndent: 0),
             SizedBox(height: 10),
 
             // --- MENU ITEMS ---
             ListTile(
-              leading: Icon(Icons.settings, color: primaryColor),
-              title: Text("Settings", style: TextStyle(color: primaryColor, fontWeight: FontWeight.bold, fontSize: 16)),
+              leading: Icon(Icons.settings, color: Color(0xFF7D5E00)),
+              title: Text("Settings", style: GoogleFonts.poppins(color: Color(0xFFB78A00), fontWeight: FontWeight.bold, fontSize: 18)),
               onTap: () {
                 Navigator.pop(context); // Close drawer first
                 Navigator.pushNamed(context, '/settings'); // Go to Settings
@@ -298,8 +322,8 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             
             ListTile(
-              leading: Icon(Icons.info_outline, color: primaryColor),
-              title: Text("About", style: TextStyle(color: primaryColor, fontWeight: FontWeight.bold, fontSize: 16)),
+              leading: Icon(Icons.info_outline, color: Color(0xFF7D5E00)),
+              title: Text("About", style: GoogleFonts.poppins(color: Color(0xFFB78A00), fontWeight: FontWeight.bold, fontSize: 18)),
               onTap: () {
                 Navigator.pop(context); // Close drawer first
                 Navigator.pushNamed(context, '/about'); // Go to About
@@ -312,8 +336,8 @@ class _HomeScreenState extends State<HomeScreen> {
             Padding(
               padding: const EdgeInsets.only(bottom: 30),
               child: ListTile(
-                leading: Icon(Icons.power_settings_new, color: primaryColor, size: 28),
-                title: Text("Log Out", style: TextStyle(color: primaryColor, fontWeight: FontWeight.bold, fontSize: 18)),
+                leading: Icon(Icons.power_settings_new, color: Color(0xFF7D5E00), size: 26),
+                title: Text("Log Out", style: GoogleFonts.poppins(color: Color(0xFFB78A00), fontWeight: FontWeight.bold, fontSize: 18)),
                 onTap: () {
                   Navigator.pop(context); // Close drawer first
                   _confirmSignOut(context);
@@ -325,23 +349,67 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-
-  // --- LOGOUT LOGIC ---
-  void _confirmSignOut(BuildContext context) {
+void _confirmSignOut(BuildContext context) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text("Logout"),
-        content: Text("Are you sure you want to log out?"),
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)), // Rounded corners
+        
+        // 1. CENTERED TITLE
+        title: Center(
+          child: Text(
+            "Log Out",
+            style: GoogleFonts.poppins(
+              fontWeight: FontWeight.bold, 
+              color: Color(0xFF7D5E00)
+            ),
+          ),
+        ),
+        
+        content: Text(
+          "Are you sure you want to log out?",
+          textAlign: TextAlign.center, // Center content text
+          style: GoogleFonts.poppins(),
+        ),
+        
+        actionsAlignment: MainAxisAlignment.center, // Center the buttons row
+        actionsPadding: EdgeInsets.only(bottom: 20, left: 10, right: 10),
+        
         actions: [
-          TextButton(child: Text("Cancel"), onPressed: () => Navigator.pop(context)),
+          // 2. NO BUTTON
           TextButton(
-            child: Text("Logout", style: TextStyle(color: Colors.red)),
+            child: Text(
+              "No", 
+              style: GoogleFonts.poppins(color: Colors.grey[800], fontWeight: FontWeight.bold)
+            ),
+            onPressed: () => Navigator.pop(context),
+          ),
+          
+          SizedBox(width: 10), // Spacing between buttons
+
+          // 2. YES BUTTON (Styled)
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Color(0xFFF7E28C), // Gold Button
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+              padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+              elevation: 0,
+            ),
+            child: Text(
+              "Yes", 
+              style: GoogleFonts.poppins(color: Color(0xFF7D5E00), fontWeight: FontWeight.bold)
+            ),
             onPressed: () async {
-              Navigator.pop(context);
+              Navigator.pop(context); // 1. Close the dialog popup
+              
+              // 2. Reset the welcome flag so the next user sees the popup
               HomeScreen.welcomeShown = false; 
+              
+              // 3. Sign out from Firebase
               await _auth.signOut();
-              // Exit MainLayout to Welcome Screen
+              
+              // 4. NAVIGATE OUT CORRECTLY
               Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil('/', (route) => false);
             },
           ),
@@ -358,7 +426,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Container(
         margin: EdgeInsets.only(bottom: 15),
         padding: EdgeInsets.all(10),
-        decoration: BoxDecoration(color: Color(0xFFF9E27F).withOpacity(0.5), borderRadius: BorderRadius.circular(20)),
+        decoration: BoxDecoration(color: Color(0xFFF9E27F), borderRadius: BorderRadius.circular(20)),
         child: Row(
           children: [
             Container(
@@ -378,19 +446,19 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(data['title'] ?? "Donation Item", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.brown[800])),
-                  Text("Category: ${data['category'] ?? '---'}", style: TextStyle(fontSize: 12, color: Colors.brown[600])),
-                  Text("Condition: ${data['condition'] ?? '---'}", style: TextStyle(fontSize: 12, color: Colors.brown[600])),
-                  Text("Location: ${data['location'] ?? '---'}", style: TextStyle(fontSize: 12, color: Colors.brown[600])),
+                  Text(data['title'] ?? "Donation Item", style: GoogleFonts.poppins(fontWeight: FontWeight.bold, color: Color(0xFF7D5E00))),
+                  Text("Category: ${data['category'] ?? '---'}", style: GoogleFonts.poppins(fontSize: 12, color: Color(0xFF7D5E00))),
+                  Text("Condition: ${data['condition'] ?? '---'}", style: GoogleFonts.poppins(fontSize: 12, color: Color(0xFF7D5E00))),
+                  Text("Location: ${data['location'] ?? '---'}", style: GoogleFonts.poppins(fontSize: 12, color: Color(0xFF7D5E00))),
                   Align(
                     alignment: Alignment.bottomRight,
                     child: Container(
                       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                      decoration: BoxDecoration(color: Color(0xFFA1770E), borderRadius: BorderRadius.circular(10)),
+                      decoration: BoxDecoration(color: Color(0xFFB78A00), borderRadius: BorderRadius.circular(10)),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Text("View", style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold)),
+                          Text("View", style: GoogleFonts.poppins(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold)),
                           SizedBox(width: 5),
                           Icon(Icons.arrow_forward, color: Colors.white, size: 10),
                         ],

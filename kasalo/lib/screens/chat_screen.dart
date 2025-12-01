@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../services/database_service.dart';
-import 'donation_detail_screen.dart'; // IMPORT THIS so we can navigate there
+import 'donation_detail_screen.dart';
+import 'package:google_fonts/google_fonts.dart'; 
+ // IMPORT THIS so we can navigate there
 
 class ChatScreen extends StatefulWidget {
   final String chatId;
@@ -54,12 +56,12 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Color(0xFFFFFCEE),
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 1,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios, color: Color(0xFFA1770E), size: 20),
+          icon: Icon(Icons.arrow_back_ios, color: Color(0xFF7D5E00), size: 20),
           onPressed: () => Navigator.pop(context),
         ),
         title: StreamBuilder<DocumentSnapshot>(
@@ -74,8 +76,8 @@ class _ChatScreenState extends State<ChatScreen> {
             }
             return Column(
               children: [
-                Text(name, style: TextStyle(color: Color(0xFFA1770E), fontWeight: FontWeight.bold, fontSize: 16)),
-                Text(isOnline ? "Online" : "Offline", style: TextStyle(color: Colors.grey, fontSize: 10)),
+                Text(name, style: GoogleFonts.poppins(color: Color(0xFF7D5E00), fontWeight: FontWeight.bold, fontSize: 18)),
+                Text(isOnline ? "Online" : "Offline", style: GoogleFonts.poppins(color: Color(0xFFB78A00), fontSize: 14)),
               ],
             );
           },
@@ -87,15 +89,15 @@ class _ChatScreenState extends State<ChatScreen> {
         children: [
           // --- SHOPEE STYLE ITEM CARD ---
           Container(
-            padding: EdgeInsets.all(10),
+            padding: EdgeInsets.all(15),
             decoration: BoxDecoration(
-              color: Color(0xFFFFFDE7), 
+              color: Color(0xFFF7E28C), 
               border: Border(bottom: BorderSide(color: Colors.grey[200]!)),
             ),
             child: Row(
               children: [
                 Container(
-                  width: 50, height: 50,
+                  width: 70, height: 70,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
                     color: Colors.grey[200],
@@ -111,10 +113,10 @@ class _ChatScreenState extends State<ChatScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("Inquiry about:", style: TextStyle(fontSize: 10, color: Colors.grey[600])),
+                      Text("Inquiry about:", style: GoogleFonts.poppins(fontSize: 12, color: Color(0xFF7D5E00))),
                       Text(
                         widget.itemTitle,
-                        style: TextStyle(fontWeight: FontWeight.bold, color: Colors.brown[800], fontSize: 14),
+                        style: GoogleFonts.poppins(fontWeight: FontWeight.bold, color: Color(0xFFB78A00), fontSize: 14),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -148,7 +150,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       );
                     }
                   },
-                  child: Text("View", style: TextStyle(color: Color(0xFFA1770E), fontWeight: FontWeight.bold)),
+                  child: Text("View", style: GoogleFonts.poppins(color: Color(0xFF7D5E00), fontWeight: FontWeight.bold)),
                 )
               ],
             ),
@@ -177,14 +179,14 @@ class _ChatScreenState extends State<ChatScreen> {
                         mainAxisAlignment: isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          if (!isMe) CircleAvatar(radius: 14, backgroundColor: Color(0xFFA1770E), child: Icon(Icons.person, size: 16, color: Colors.white)),
+                          if (!isMe) CircleAvatar(radius: 14, backgroundColor: Color(0xFFB78A00), child: Icon(Icons.person, size: 16, color: Colors.white)),
                           if (!isMe) SizedBox(width: 8),
 
                           if (isMe) Padding(
                             padding: const EdgeInsets.only(right: 5, bottom: 2),
                             child: Row(
                               children: [
-                                Text(time, style: TextStyle(fontSize: 9, color: Colors.grey)),
+                                Text(time, style: GoogleFonts.poppins(fontSize: 10, color: Color(0xFF7D5E00))),
                                 SizedBox(width: 2),
                                 if (isRead) Icon(Icons.done_all, size: 14, color: Colors.brown),
                               ],
@@ -195,18 +197,18 @@ class _ChatScreenState extends State<ChatScreen> {
                             constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.7),
                             padding: EdgeInsets.all(12),
                             decoration: BoxDecoration(
-                              color: isMe ? Color(0xFFF9E27F) : Colors.grey[200],
+                              color: isMe ? Color(0xFFF2E5AD) : Color(0xFFD9D9D8),
                               borderRadius: BorderRadius.circular(15).copyWith(
                                 bottomLeft: isMe ? Radius.circular(15) : Radius.zero,
                                 bottomRight: isMe ? Radius.zero : Radius.circular(15)
                               ),
                             ),
-                            child: Text(msg['text'], style: TextStyle(color: Colors.black87)),
+                            child: Text(msg['text'], style: GoogleFonts.poppins(color: Colors.black87)),
                           ),
 
                           if (!isMe) Padding(
                             padding: const EdgeInsets.only(left: 5, bottom: 2),
-                            child: Text(time, style: TextStyle(fontSize: 9, color: Colors.grey)),
+                            child: Text(time, style: GoogleFonts.poppins(fontSize: 10, color: Color(0xFF7D5E00))),
                           ),
                         ],
                       ),
@@ -227,7 +229,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   child: TextField(
                     controller: _messageController,
                     decoration: InputDecoration(
-                      filled: true, fillColor: Colors.grey[100],
+                      filled: true, fillColor: Color(0xFFFFF7D4),
                       hintText: "Type a message...",
                       border: OutlineInputBorder(borderRadius: BorderRadius.circular(30), borderSide: BorderSide.none),
                       contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),

@@ -3,7 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../services/database_service.dart';
 import '../services/auth_service.dart';
-import 'home_screen.dart'; // Import Home to access the welcome flag
+import 'home_screen.dart';
+import 'package:google_fonts/google_fonts.dart'; 
+ // Import Home to access the welcome flag
 
 class ProfileScreen extends StatelessWidget {
   final User? user = FirebaseAuth.instance.currentUser;
@@ -16,7 +18,7 @@ class ProfileScreen extends StatelessWidget {
       
       // Top Bar (Transparent to show the cream background)
       appBar: AppBar(
-        backgroundColor: Color(0xFFFFFDE7),
+        backgroundColor: Color(0xFFFFF7D4),
         elevation: 0,
         automaticallyImplyLeading: false, // ADD THIS: Prevents default back arrow
         // DELETED: leading: IconButton(...)
@@ -24,7 +26,7 @@ class ProfileScreen extends StatelessWidget {
         actions: [
           // KEEP: Logout Button
           IconButton(
-            icon: Icon(Icons.logout, color: Colors.brown),
+            icon: Icon(Icons.logout, color: Color(0xFF7D5E00)),
             onPressed: () => _confirmSignOut(context),
           )
         ],
@@ -35,7 +37,7 @@ class ProfileScreen extends StatelessWidget {
         children: [
           // --- 1. TOP PROFILE SECTION (Cream Background) ---
           Container(
-            color: Color(0xFFFFFDE7),
+            color: Color(0xFFFFF7D4),
             padding: EdgeInsets.only(bottom: 30),
             child: FutureBuilder<DocumentSnapshot>(
               future: DatabaseService(uid: user?.uid).getUserData(),
@@ -54,11 +56,11 @@ class ProfileScreen extends StatelessWidget {
                     // Profile Icon
                     CircleAvatar(
                       radius: 50,
-                      backgroundColor: Color(0xFFA1770E), // Dark Gold border
+                      backgroundColor: Color(0xFF7D5E00), // Dark Gold border
                       child: CircleAvatar(
                         radius: 45,
                         backgroundColor: Color(0xFFF9E27F), // Light Gold fill
-                        child: Icon(Icons.person, size: 50, color: Colors.brown),
+                        child: Icon(Icons.person, size: 50, color: Color(0xFF7D5E00)),
                       ),
                     ),
                     SizedBox(height: 15),
@@ -66,20 +68,20 @@ class ProfileScreen extends StatelessWidget {
                     // Full Name
                     Text(
                       name,
-                      style: TextStyle(
+                      style: GoogleFonts.poppins(
                         fontSize: 22, 
                         fontWeight: FontWeight.bold, 
-                        color: Color(0xFFA1770E) // Dark Gold/Brown
+                        color: Color(0xFF7D5E00) // Dark Gold/Brown
                       ),
                     ),
                     
                     // Email Address
                     Text(
                       email,
-                      style: TextStyle(
-                        fontSize: 14, 
+                      style: GoogleFonts.poppins(
+                        fontSize: 15, 
                         fontStyle: FontStyle.italic, 
-                        color: Color(0xFFA1770E)
+                        color: Color(0xFFB78A00)
                       ),
                     ),
                   ],
@@ -93,10 +95,10 @@ class ProfileScreen extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
             child: Text(
               "Requested Items:",
-              style: TextStyle(
-                fontSize: 18,
+              style: GoogleFonts.poppins(
+                fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF5D4037), // Dark Brown
+                color: Color(0xFF7D5E00), // Dark Brown
               ),
             ),
           ),
@@ -119,7 +121,7 @@ class ProfileScreen extends StatelessWidget {
                       children: [
                         Icon(Icons.shopping_bag_outlined, size: 50, color: Colors.grey[300]),
                         SizedBox(height: 10),
-                        Text("No requested items", style: TextStyle(color: Colors.grey)),
+                        Text("No requested items", style: GoogleFonts.poppins(color: Colors.grey[500])),
                       ],
                     ),
                   );
@@ -151,7 +153,7 @@ class ProfileScreen extends StatelessWidget {
       margin: EdgeInsets.only(bottom: 15),
       padding: EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Color(0xFFF9E27F).withOpacity(0.6), // Light yellow
+        color: Color(0xFFF7E28C), // Light yellow
         borderRadius: BorderRadius.circular(20),
       ),
       child: Row(
@@ -161,7 +163,7 @@ class ProfileScreen extends StatelessWidget {
           Container(
             width: 80, height: 80,
             decoration: BoxDecoration(
-              color: Colors.blue[100],
+              color: Colors.white,
               borderRadius: BorderRadius.circular(15),
             ),
             child: () {
@@ -180,10 +182,9 @@ class ProfileScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(data['title'] ?? "Requested Item", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.brown[800], fontSize: 16)),
+                Text(data['title'] ?? "Requested Item", style: GoogleFonts.poppins(fontWeight: FontWeight.bold, color: Color(0xFF7D5E00), fontSize: 16)),
                 SizedBox(height: 4),
-                Text("Category: ${data['category'] ?? '-'}", style: TextStyle(fontSize: 12, color: Colors.brown[600])),
-                
+                Text("Category: ${data['category'] ?? '-'}", style: GoogleFonts.poppins(fontSize: 14, color: Color(0xFF7D5E00))),
                 SizedBox(height: 8),
                 
                 // --- NEW STATUS BADGE ---
@@ -195,7 +196,7 @@ class ProfileScreen extends StatelessWidget {
                   ),
                   child: Text(
                     status, // Shows "Pending" or "Completed"
-                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 10),
+                    style: GoogleFonts.poppins(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12),
                   ),
                 ),
               ],
@@ -207,19 +208,57 @@ class ProfileScreen extends StatelessWidget {
   }
 
   // --- LOGOUT LOGIC (WITH RESET) ---
-  void _confirmSignOut(BuildContext context) {
+void _confirmSignOut(BuildContext context) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text("Logout"),
-        content: Text("Are you sure you want to log out?"),
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)), // Rounded corners
+        
+        // 1. CENTERED TITLE
+        title: Center(
+          child: Text(
+            "Log Out",
+            style: GoogleFonts.poppins(
+              fontWeight: FontWeight.bold, 
+              color: Color(0xFF7D5E00)
+            ),
+          ),
+        ),
+        
+        content: Text(
+          "Are you sure you want to log out?",
+          textAlign: TextAlign.center, // Center content text
+          style: GoogleFonts.poppins(),
+        ),
+        
+        actionsAlignment: MainAxisAlignment.center, // Center the buttons row
+        actionsPadding: EdgeInsets.only(bottom: 20, left: 10, right: 10),
+        
         actions: [
+          // 2. NO BUTTON
           TextButton(
-            child: Text("Cancel"),
+            child: Text(
+              "No", 
+              style: GoogleFonts.poppins(color: Colors.grey[800], fontWeight: FontWeight.bold)
+            ),
             onPressed: () => Navigator.pop(context),
           ),
-          TextButton(
-            child: Text("Logout", style: TextStyle(color: Colors.red)),
+          
+          SizedBox(width: 10), // Spacing between buttons
+
+          // 2. YES BUTTON (Styled)
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Color(0xFFF7E28C), // Gold Button
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+              padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+              elevation: 0,
+            ),
+            child: Text(
+              "Yes", 
+              style: GoogleFonts.poppins(color: Color(0xFF7D5E00), fontWeight: FontWeight.bold)
+            ),
             onPressed: () async {
               Navigator.pop(context); // 1. Close the dialog popup
               
@@ -230,8 +269,6 @@ class ProfileScreen extends StatelessWidget {
               await _auth.signOut();
               
               // 4. NAVIGATE OUT CORRECTLY
-              // 'rootNavigator: true' grabs the very top-level navigation controller,
-              // ensuring we completely exit the MainLayout and all tabs.
               Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil('/', (route) => false);
             },
           ),

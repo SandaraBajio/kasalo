@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
+import 'package:google_fonts/google_fonts.dart'; 
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -19,10 +20,9 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     // Define colors based on your image
-    final Color backgroundColor = Color(0xFFFFFDE7); // Light cream background
-    final Color buttonColor = Color(0xFFF9E27F);     // Yellow/Gold button
-    final Color textColor = Color(0xFF8D6E63);       // Brownish text
-
+    final Color backgroundColor = Color(0xFFFFF7D4); // Light cream background
+    final Color buttonColor = Color(0xFFF7E28C);     // Yellow/Gold button
+    
     return Scaffold(
       backgroundColor: backgroundColor,
       body: SafeArea(
@@ -37,35 +37,21 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: [
                     // Logo Placeholder
                     Container(
-                      height: 120,
-                      width: 120,
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.5),
-                        shape: BoxShape.circle,
+                        height: 230,
+                        width: 230,
+                        child: Image.asset(
+                          'assets/icons/logo.png',
+                          fit: BoxFit.contain,
+                        ),
                       ),
-                      child: Center(
-                        child: Icon(Icons.volunteer_activism, size: 60, color: textColor),
-                      ),
-                    ),
                     SizedBox(height: 10),
-                    // "kasalo" Text (You can replace with image later)
-                    Text(
-                      "kasalo",
-                      style: TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                        color: buttonColor,
-                        shadows: [Shadow(blurRadius: 1, color: Colors.black26, offset: Offset(1,1))]
-                      ),
-                    ),
-                    SizedBox(height: 5),
-                    // Slogan
+                    // Applied Abril Fatface
                     Text(
                       "Share your Kindness",
-                      style: TextStyle(
-                        fontSize: 18,
+                      style: GoogleFonts.abrilFatface(
+                        fontSize: 25,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFFA1887F),
+                        color: Color(0xFFB78A00),
                       ),
                     ),
                   ],
@@ -75,39 +61,44 @@ class _LoginScreenState extends State<LoginScreen> {
 
             // --- BOTTOM SECTION: White Container with Form ---
             Expanded(
-              flex: 6, // Takes up 60% of space
+              flex: 6, 
               child: Container(
                 width: double.infinity,
+                // 1. Margin for the floating look
+                margin: EdgeInsets.only(left: 0, right: 0, bottom: 0), 
+                
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(40),
-                    topRight: Radius.circular(40),
-                  ),
+                  // 2. Rounded corners
+                  borderRadius: BorderRadius.circular(40), 
                   boxShadow: [
                     BoxShadow(color: Colors.black12, blurRadius: 10, spreadRadius: 2)
                   ],
                 ),
+                // 3. The Form is now correctly inside this Container
                 child: SingleChildScrollView(
                   padding: EdgeInsets.symmetric(horizontal: 30, vertical: 30),
                   child: Form(
                     key: _formKey,
                     child: Column(
                       children: [
+                        // Applied Poppins
                         Text(
                           "SIGN IN",
-                          style: TextStyle(
+                          style: GoogleFonts.poppins(
                             fontSize: 22,
                             fontWeight: FontWeight.bold,
-                            color: Color(0xFFBCAAA4),
+                            color: Color(0xFFB78A00),
                           ),
                         ),
                         SizedBox(height: 30),
 
                         // Email Field (Grey Rounded)
                         TextFormField(
+                          style: GoogleFonts.poppins(), // Applied to input text
                           decoration: InputDecoration(
                             hintText: "Email",
+                            hintStyle: GoogleFonts.poppins(), // Applied to hint text
                             filled: true,
                             fillColor: Colors.grey[200],
                             border: OutlineInputBorder(
@@ -123,8 +114,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
                         // Password Field (Grey Rounded)
                         TextFormField(
+                          style: GoogleFonts.poppins(), // Applied to input text
                           decoration: InputDecoration(
                             hintText: "Password",
+                            hintStyle: GoogleFonts.poppins(), // Applied to hint text
                             filled: true,
                             fillColor: Colors.grey[200],
                             border: OutlineInputBorder(
@@ -153,7 +146,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             child: Text(
                               loading ? "Loading..." : "Log in",
-                              style: TextStyle(
+                              // Applied Poppins
+                              style: GoogleFonts.poppins(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
                                 color: Color(0xFF5D4037), // Dark brown text
@@ -179,7 +173,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         
                         // Error Message
                         if (error.isNotEmpty)
-                          Text(error, style: TextStyle(color: Colors.red, fontSize: 14)),
+                          Text(error, style: GoogleFonts.poppins(color: Colors.red, fontSize: 14)),
 
                         SizedBox(height: 20),
 
@@ -187,14 +181,15 @@ class _LoginScreenState extends State<LoginScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text("Don't have an account? "),
+                            Text("Don't have an account? ", style: GoogleFonts.poppins()),
                             GestureDetector(
                               onTap: () {
                                 Navigator.pushNamed(context, '/register');
                               },
                               child: Text(
                                 "Register now",
-                                style: TextStyle(
+                                // Applied Poppins
+                                style: GoogleFonts.poppins(
                                   fontWeight: FontWeight.bold,
                                   decoration: TextDecoration.underline,
                                   color: Colors.black,
