@@ -27,14 +27,6 @@ This project is built in alignment with **United Nations Sustainable Development
 
 ---
 
-## 📱 User Interface
-| Login Screen | Registration | Home Dashboard |
-|:---:|:---:|:---:|
-| <img src="assets/screenshots/login.png" width="200"> | <img src="assets/screenshots/register.png" width="200"> | <img src="assets/screenshots/home.png" width="200"> |
-*(Place your screenshots in an `assets/screenshots` folder)*
-
----
-
 ## 🛠️ Tech Stack
 * **Framework:** [Flutter](https://flutter.dev/) (Dart)
 * **Backend:** [Firebase](https://firebase.google.com/)
