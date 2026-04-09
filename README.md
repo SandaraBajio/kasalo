@@ -7,23 +7,23 @@
 ---
 
 ## 📖 About the Project
-[cite_start]**Kasalo** is a mobile application designed to digitize the concept of a "Community Pantry"[cite: 64]. It connects individuals who have surplus resources with those in need, ensuring that valuable items like food and clothing are utilized rather than discarded.
+**Kasalo** is a mobile application designed to digitize the concept of a "Community Pantry". It connects individuals who have surplus resources with those in need, ensuring that valuable items like food and clothing are utilized rather than discarded.
 
-[cite_start]This project was developed as a requirement for **CS312 - Mobile Computing** at **Batangas State University - The National Engineering University**[cite: 49, 58].
+This project was developed as a requirement for **CS312 - Mobile Computing** at **Batangas State University - The National Engineering University**.
 
 ### 🎯 SDG Alignment
 This project is built in alignment with **United Nations Sustainable Development Goal 12**:
-> [cite_start]**SDG 12: Responsible Consumption and Production** [cite: 66]
+> **SDG 12: Responsible Consumption and Production**
 > *Ensuring sustainable consumption and production patterns by facilitating resource redistribution.*
 
 ---
 
 ## ✨ Key Features
-* [cite_start]**🔐 Secure Authentication:** User sign-up and login powered by **Firebase Authentication** (Email/Password)[cite: 77].
-* [cite_start]**📍 Geo-Location:** Automatic address detection to show donations near the user[cite: 363, 542].
-* [cite_start]**📦 Donation Management:** Users can browse categories (e.g., Clothes, Food) and post their own donations[cite: 543, 579].
-* [cite_start]**💬 In-App Messaging:** Integrated chat feature for donors and beneficiaries to coordinate pickups[cite: 580].
-* [cite_start]**👤 User Profiles:** Manage personal information and view donation history[cite: 537, 587].
+* **🔐 Secure Authentication:** User sign-up and login powered by **Firebase Authentication** (Email/Password).
+* **📍 Geo-Location:** Automatic address detection to show donations near the user.
+* **📦 Donation Management:** Users can browse categories (e.g., Clothes, Food) and post their own donations.
+* **💬 In-App Messaging:** Integrated chat feature for donors and beneficiaries to coordinate pickups.
+* **👤 User Profiles:** Manage personal information and view donation history.
 
 ---
 
@@ -31,13 +31,13 @@ This project is built in alignment with **United Nations Sustainable Development
 * **Framework:** [Flutter](https://flutter.dev/) (Dart)
 * **Backend:** [Firebase](https://firebase.google.com/)
 * **Authentication:** Firebase Auth
-* [cite_start]**Database:** Cloud Firestore (NoSQL) [cite: 468]
-* [cite_start]**Design:** Google Fonts (Poppins) [cite: 103]
+* **Database:** Cloud Firestore (NoSQL) 
+* **Design:** Google Fonts (Poppins)
 
 ---
 
 ## 📂 Project Structure
-[cite_start]Based on the project documentation :
+Based on the project documentation :
 
 ```text
 kasalo/
